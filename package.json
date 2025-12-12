@@ -1,43 +1,43 @@
 {
-  "dependencies": {
-    "@fal-ai/client": "^1.2.2",
-    "@prisma/client": "latest",
-    "@rubriclab/agents": "^0.0.21",
-    "@rubriclab/auth": "^0.0.17",
-    "@rubriclab/ui": "^5.0.81",
-    "@t3-oss/env-nextjs": "latest",
-    "next": "15.1.9",
-    "openai": "^4.78.1",
-    "resend": "latest",
-    "rubricui": "*",
-    "zod": "latest",
-    "react": "latest",
-    "react-dom": "latest"
-  },
-  "devDependencies": {
-    "@rubriclab/config": "*",
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "biome": "latest",
-    "npm-check-updates": "latest",
-    "prisma": "latest",
-    "typescript": "latest"
-  },
-  "packageManager": "bun@1.1.43",
-  "scripts": {
-    "bleed": "ncu -u",
-    "format": "biome format --write .",
-    "lint": "biome check .",
-    "lint:fix": "biome lint . --write --unsafe",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "db:push": "prisma db push --schema src/schema",
-    "db:generate": "prisma generate --schema src/schema",
-    "db:studio": "prisma studio --schema src/schema",
-    "postinstall": "bun db:generate",
-    "prepare": "bun db:push"
-  },
-  "license": "go nuts"
+	"dependencies": {
+		"@fal-ai/client": "^1.2.2",
+		"@prisma/client": "latest",
+		"@rubriclab/agents": "^0.0.21",
+		"@rubriclab/auth": "^0.0.17",
+		"@rubriclab/ui": "^5.0.81",
+		"@t3-oss/env-nextjs": "latest",
+		"next": "^16.0.10",
+		"openai": "^4.78.1",
+		"react": "latest",
+		"react-dom": "latest",
+		"resend": "latest",
+		"rubricui": "*",
+		"zod": "latest"
+	},
+	"devDependencies": {
+		"@rubriclab/config": "*",
+		"@types/node": "latest",
+		"@types/react": "latest",
+		"@types/react-dom": "latest",
+		"biome": "latest",
+		"npm-check-updates": "latest",
+		"prisma": "latest",
+		"typescript": "latest"
+	},
+	"packageManager": "bun@1.1.43",
+	"scripts": {
+		"bleed": "ncu -u",
+		"format": "biome format --write .",
+		"lint": "biome check .",
+		"lint:fix": "biome lint . --write --unsafe",
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"db:push": "prisma db push --schema src/schema",
+		"db:generate": "prisma generate --schema src/schema",
+		"db:studio": "prisma studio --schema src/schema",
+		"postinstall": "bun db:generate",
+		"prepare": "bun db:push"
+	},
+	"license": "go nuts"
 }
