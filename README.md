@@ -1,152 +1,41 @@
 # MMXXV
 
-A prediction market game for 2025. Players create markets, make predictions, and compete for points based on their forecasting accuracy.
+A forecasting game with friends, one season a year. Each season is named for its year in Roman numerals: MMXXV, MMXXVII.
 
-## Tech Stack
+## A season
 
-- **Frontend**
-  - Next.js 15 (App Router)
-  - TypeScript
-  - Vanilla CSS with CSS Variables
-  - @rubriclab/ui components
-  - @rubriclab/auth for authentication
+1. **Propose.** Players propose up to 5 yes or no questions about the year and vote on each other's. The top 25 make the board.
+2. **Forecast.** Everyone gives each market on the board a probability. Forecasts stay sealed until they lock.
+3. **Watch.** Markets resolve as the year unfolds. An admin marks each one yes or no.
+4. **Score.** A forecast scores `100 × (1 − 4 × miss²)`: 0 for a coin flip, +100 for certainty when right, −300 when wrong. Most points wins.
 
-- **Backend**
-  - Prisma ORM with PostgreSQL
-  - Next.js Server Actions
-  - Resend for email notifications
+A season is one row in `Season`: `year`, `boardSize`, `proposalsCloseAt`, `forecastsLockAt`, `endsAt`. The phase comes from the dates. The newest season is the one on the home page.
 
-- **Infrastructure**
-  - [Vercel](https://vercel.com) for deployment
-  - [Neon](https://neon.tech) for PostgreSQL database
-  - [Resend](https://resend.com) for transactional emails
-  - Biome for code formatting
-
-## Development Setup
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- [Bun](https://bun.sh) for package management
-- [Git](https://github.com/)
-- A code editor (we recommend [Cursor](https://cursor.sh))
-
-### Environment Variables
-
-Copy `.env.example` to `.env` and configure the following variables:
-
-```bash
-# App
-URL                 # Base URL of the application (e.g., http://localhost:3000 for development)
-
-# Database
-DATABASE_URL        # PostgreSQL connection string from Neon (https://neon.tech)
-
-# Email
-RESEND_API_KEY     # API key from Resend.com for sending emails
+```sql
+insert into "Season" (year, "boardSize", "proposalsCloseAt", "forecastsLockAt", "endsAt")
+values (2028, 25, '2028-01-16T05:00Z', '2028-02-01T05:00Z', '2029-01-01T05:00Z');
 ```
 
-#### Service Setup
+Admins can resolve and delete markets: `update "User" set admin = true where username = '…'`.
 
-1. **Database**: 
-   - Create a new project on [Neon](https://neon.tech)
-   - Copy the connection string from the dashboard
-   - Make sure to append `?sslmode=require` to the connection string
+## Develop
 
-2. **Email**:
-   - Create an account on [Resend](https://resend.com)
-   - Get your API key from the dashboard
-   - Verify your domain for production use
-
-3. **Deployment**:
-   - We recommend [Vercel](https://vercel.com) for deployment
-   - Connect your GitHub repository
-   - Add the environment variables in Vercel's dashboard
-
-You can also request access to a pre-configured `.env` file by emailing dexter@dexterstorey.com with subject: "URGENT ACCESS: MMXXV Dev Setup"
-
-### Getting Started
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/RubricLab/mmxxv.git
-   cd mmxxv
-   ```
-
-2. Install dependencies:
-   ```bash
-   bun install
-   ```
-
-3. Set up environment variables:
-   - Copy `.env.example` to `.env`
-   - Configure the variables as described above
-
-4. Initialize the database:
-   ```bash
-   bun db:generate
-   bun db:push
-   ```
-
-5. Start the development server:
-   ```bash
-   bun dev
-   ```
-
-6. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-### NixOS
-
-Installing dependencies (`bun install`) fails because prisma [doesn't release precompiled engine files for NixOS](https://www.prisma.io/docs/orm/more/under-the-hood/engines#using-custom-engine-libraries-or-binaries). Instead you can use [a flake](https://github.com/prisma/prisma/issues/3026#issuecomment-927258138) to let nix install the prisma engines which are then accessed via environment variables.
-
-## Project Structure
-
-```
-src/
-├── app/                 # Next.js app router pages
-├── lib/
-│   ├── actions/        # Server actions
-│   ├── components/     # React components
-│   ├── services/      # Service layer
-│   └── utils/         # Utility functions
-└── schema/            # Prisma schema
+```sh
+bun install
+cp .env.example .env   # URL, DATABASE_URL (Neon), RESEND_API_KEY
+bun db:push
+bun dev
 ```
 
-## Development Guidelines
+In development, sign-in links also print to the server log.
 
-### Code Style
+Next.js 16, Prisma 7 on Neon Postgres, Resend, Vercel. `bun check` runs Biome and TypeScript.
 
-- We use Biome for code formatting and linting
-- Run `bun lint` to check for issues
-- Run `bun lint:fix` to automatically fix issues
-- Run `bun format` to format code
+## Map
 
-### Database Management
-
-- `bun db:push` - Push schema changes to database
-- `bun db:generate` - Generate Prisma client
-- `bun db:studio` - Open Prisma Studio
-
-## Contributing
-
-We welcome contributions! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## Game Rules
-
-For detailed information about how the game works, please visit the [About page](https://mmxxv.com/about) after setting up the project.
-
-## Support
-
-If you encounter any issues or need help with development:
-- Open a GitHub issue
-- Join our [Discord community](https://discord.gg/ndC6qaQC)
-
-## License
-
-This project is licensed under "go nuts" - see the package.json file for details.
+- `prisma/schema.prisma`: seasons, players, markets, votes, forecasts, comments
+- `src/lib/season.ts`: phases, numerals, ranking proposals
+- `src/lib/score.ts`: the scoring rule
+- `src/lib/data.ts`: what each page reads
+- `src/lib/actions.ts`: everything a player can do
+- `src/app`: pages; `src/components`: the pieces they share

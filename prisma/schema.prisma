@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// A season is a year of forecasting, named by its Roman numeral.
+model Season {
+  year             Int      @id
+  boardSize        Int
+  proposalsCloseAt DateTime
+  forecastsLockAt  DateTime
+  endsAt           DateTime
+  markets          Market[]
+}
+
+model User {
+  id        String     @id @default(nanoid())
+  email     String     @unique
+  username  String     @unique
+  bio       String?
+  admin     Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  sessions  Session[]
+  markets   Market[]
+  votes     Vote[]
+  forecasts Forecast[]
+  comments  Comment[]
+}
+
+model Session {
+  key       String   @id
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @map("email")
+  createdAt DateTime @default(now())
+}
+
+model SignInToken {
+  token     String   @id
+  email     String
+  createdAt DateTime @default(now())
+}
+
+model Market {
+  id                 String     @id @default(cuid())
+  season             Season     @relation(fields: [seasonYear], references: [year], onUpdate: Cascade)
+  seasonYear         Int
+  author             User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId           String
+  title              String
+  resolutionCriteria String
+  description        String?
+  outcome            Boolean?
+  resolutionNote     String?
+  resolvedAt         DateTime?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  votes              Vote[]
+  forecasts          Forecast[]
+  comments           Comment[]
+
+  @@index([seasonYear])
+}
+
+// value is +1 or -1
+model Vote {
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  marketId String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  value    Int
+
+  @@id([marketId, userId])
+}
+
+// percent is 1 to 99
+model Forecast {
+  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  marketId  String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  percent   Int
+  updatedAt DateTime @updatedAt
+
+  @@id([marketId, userId])
+}
+
+model Comment {
+  id        String    @id @default(cuid())
+  market    Market    @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  marketId  String
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  parent    Comment?  @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
+  parentId  String?
+  replies   Comment[] @relation("Replies")
+  content   String
+  createdAt DateTime  @default(now())
+
+  @@index([marketId])
+}

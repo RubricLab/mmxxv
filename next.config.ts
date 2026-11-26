@@ -1,14 +1,15 @@
 import type { NextConfig } from 'next'
 
 export default {
-	transpilePackages: ['@rubriclab/auth', '@rubriclab/ui'],
 	reactStrictMode: true,
-	images: {
-		remotePatterns: [
-			{
-				protocol: 'https',
-				hostname: 'fal.media'
-			}
+	agentRules: false,
+	turbopack: { root: import.meta.dirname },
+	async redirects() {
+		return [
+			{ source: '/about', destination: '/rules', permanent: true },
+			{ source: '/leaderboard', destination: '/standings', permanent: true },
+			{ source: '/markets', destination: '/', permanent: true },
+			{ source: '/probabilities/:path*', destination: '/', permanent: true }
 		]
 	}
 } satisfies NextConfig

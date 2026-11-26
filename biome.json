@@ -1,3 +1,48 @@
 {
-	"extends": ["@rubriclab/config/biome"]
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"files": {
+		"includes": [
+			"**",
+			"!src/generated",
+			"!.next",
+			"!backups",
+			"!.vscode"
+		]
+	},
+	"formatter": {
+		"indentStyle": "tab",
+		"lineWidth": 110
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single",
+			"jsxQuoteStyle": "double",
+			"semicolons": "asNeeded",
+			"trailingCommas": "none",
+			"arrowParentheses": "asNeeded"
+		}
+	},
+	"css": {
+		"parser": {
+			"cssModules": false
+		}
+	},
+	"linter": {
+		"rules": {
+			"recommended": true,
+			"style": {
+				"noDescendingSpecificity": "off"
+			},
+			"a11y": {
+				"noAutofocus": "off"
+			}
+		}
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	}
 }

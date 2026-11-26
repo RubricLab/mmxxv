@@ -2,3 +2,9 @@ node_modules
 .next/
 .DS_Store
 .env
+.env*.local
+.vercel
+backups/
+src/generated/
+next-env.d.ts
+*.tsbuildinfo

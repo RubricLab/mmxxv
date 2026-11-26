@@ -1,43 +1,34 @@
 {
+	"name": "mmxxv",
+	"private": true,
+	"license": "go nuts",
+	"type": "module",
+	"scripts": {
+		"dev": "next dev",
+		"build": "prisma generate && next build",
+		"start": "next start",
+		"check": "biome check . && tsc --noEmit",
+		"format": "biome check --write .",
+		"db:push": "prisma db push",
+		"db:studio": "prisma studio"
+	},
 	"dependencies": {
-		"@fal-ai/client": "^1.2.2",
-		"@prisma/client": "latest",
-		"@rubriclab/agents": "^0.0.21",
-		"@rubriclab/auth": "^0.0.17",
-		"@rubriclab/ui": "^5.0.81",
-		"@t3-oss/env-nextjs": "latest",
-		"next": "15.1.4",
-		"openai": "^4.78.1",
-		"resend": "latest",
-		"rubricui": "*",
-		"zod": "latest",
-		"react": "latest",
-		"react-dom": "latest"
+		"@prisma/adapter-pg": "7.10.1",
+		"@prisma/client": "7.10.1",
+		"next": "16.4.6",
+		"pg": "^8.23.1",
+		"react": "19.3.1",
+		"react-dom": "19.3.1",
+		"resend": "^6.40.1",
+		"zod": "^4.6.7"
 	},
 	"devDependencies": {
-		"@rubriclab/config": "*",
-		"@types/node": "latest",
-		"@types/react": "latest",
-		"@types/react-dom": "latest",
-		"biome": "latest",
-		"npm-check-updates": "latest",
-		"prisma": "latest",
-		"typescript": "latest"
-	},
-	"packageManager": "bun@1.1.43",
-	"scripts": {
-		"bleed": "ncu -u",
-		"format": "biome format --write .",
-		"lint": "biome check .",
-		"lint:fix": "biome lint . --write --unsafe",
-		"dev": "next dev",
-		"build": "next build",
-		"start": "next start",
-		"db:push": "prisma db push --schema src/schema",
-		"db:generate": "prisma generate --schema src/schema",
-		"db:studio": "prisma studio --schema src/schema",
-		"postinstall": "bun db:generate",
-		"prepare": "bun db:push"
-	},
-	"license": "go nuts"
+		"@biomejs/biome": "^2.6.9",
+		"@types/node": "^22",
+		"@types/pg": "^8.23.1",
+		"@types/react": "^19.3.3",
+		"@types/react-dom": "^19.3.0",
+		"prisma": "7.10.1",
+		"typescript": "6.0.3"
+	}
 }

@@ -1,7 +1,0 @@
-'use server'
-
-import { revalidatePath } from 'next/cache'
-import { getSession } from '~/actions/auth'
-import { db } from '~/db'
-
-// Market-specific actions go here 
