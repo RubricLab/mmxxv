@@ -1,0 +1,9 @@
+.env
+.env*.local
+backups
+.next
+node_modules
+src/generated
+*.tsbuildinfo
+next-env.d.ts
+.vscode
